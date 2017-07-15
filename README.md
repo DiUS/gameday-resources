@@ -8,12 +8,16 @@ talk from Agile Australia (agileaustralia.com.au/2017/sessions/#pete-and-matt) i
 You can also see our talk [slides](https://www.slideshare.net/DiUSComputing/gameday-achieving-resilience-through-chaos-engineering/)
 and soon, our GameDay video.
 
-Watch a video demonstrating [![Chaos Engineering with Muxy and Vegeta](https://img.youtube.com/vi/DtbA9W9TS3s/0.jpg)](http://www.youtube.com/watch?v=T-DtbA9W9TS3s), 
-using the code in this repository.
+## Video demo
+
+Watch a video demonstrating the techniques used in this repository:
+
+[![Chaos Engineering with Muxy and Vegeta](https://img.youtube.com/vi/DtbA9W9TS3s/0.jpg)](http://www.youtube.com/watch?v=DtbA9W9TS3s)
 
 ## Getting started
 
-* A local installation of [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/)
+You'll need a local installation of [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) 
+to run the code in this project.
 
 From hereon, we will refer to the docker host as `docker`. You should create a local host entry for docker pointing to the IP address of your docker machine:
 
