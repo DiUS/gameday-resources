@@ -1,0 +1,79 @@
+# Front end application
+api:
+  build: api
+  ports:
+   - "8000:80"
+   - "8181:8181" # Hystrix stream
+  expose:
+  - "80"
+  - "8181"
+  links:
+  - muxy:backend
+  - statsd:statsd
+  environment:
+  - "API_HOST=http://backend"
+  - "STATSD_HOST=statsd:8125"
+
+# Back-end service
+backend:
+  build: backend
+  ports:
+   - "8001:80"
+  expose:
+  - "80"
+  links:
+  - statsd:statsd
+  environment:
+  - "STATSD_HOST=statsd:8125"
+
+# Muxy resilience testing
+muxy:
+  build: .
+  ports:
+  - "8002:80"
+  expose:
+  - "80"
+  privileged: true
+  volumes:
+  - "./muxy/conf/:/opt/muxy/conf"
+  links:
+  - backend:backend
+
+# This guy runs our Unit tests!
+test:
+  build: muxy
+  command: go test -v ./...
+  links:
+    - api:api
+  environment:
+  - "API_HOST=http://api"
+
+# This guy runs our Load tests!
+vegeta:
+  image: peterevans/vegeta
+  command: sh -c "echo 'GET http://api/ping' | vegeta attack -rate=50 -duration=15s | tee results.bin | vegeta report"
+  links:
+    - api:api
+
+statsd:
+  build: sgg
+  ports:
+  - "8025:80"
+  - "2003:2003/tcp"
+  - "8125:8125/udp"
+  - "8126:8126"
+  - "9200:9200"
+  - "9300:9300"
+  - "8081:81"
+  - "80:80"
+  volumes:
+  - "./sgg/data/whisper:/opt/graphite/storage/whisper"
+  - "./sgg/data/elasticsearch:/var/lib/elasticsearch"
+  - "./sgg/data/sqllite:/opt/grafana/data"    
+
+hystrixdashboard:
+  image: kennedyoliveira/hystrix-dashboard
+  links:
+  - api:api
+  ports:
+  - "7979:7979"

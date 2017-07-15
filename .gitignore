@@ -1,0 +1,5 @@
+sgg/data
+.DS_Store
+*.log
+*.bin
+*.swp

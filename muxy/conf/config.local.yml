@@ -1,0 +1,66 @@
+## Test configuration name. Used for reporting.
+name: Network and HTTP screwer.
+
+## Test Description. Used for reporting
+description: Slow network to mobile levels, and add 1s delay to all messages
+
+## Specify log output level
+##
+## Log Levels supported:
+## Trace (0), Debug (1), Info (2, Default), Warn (3), Error (4), Fatal (5)
+loglevel: 0
+
+## Configure a proxy that will handle your requests, and forward
+## to proxied host.
+##
+## Currently supports `tcp_proxy` and `http_proxy`.
+proxy:
+
+  ## HTTP Proxy: Configures an HTTP Proxy
+  - name: http_proxy
+    config:
+      host: 0.0.0.0
+      port: 8001
+      protocol: http
+      proxy_host: localhost
+      proxy_port: 8002
+      proxy_protocol: http
+
+## Middleware
+##
+## Middleware are plugins that are given the opportunity to intervene
+## before a request is dispatched to the proxied system (PRE_DISPATCH event)
+## and afterwards (POST_DISPATCH event). They are given a reference to
+## the current context (HTTP Context or []bytes) and can mutate them.
+##
+## Middleware are executed in the order specified in this config.
+##
+middleware:
+
+  ## Request Logger - use this to see what's going in/out of the Proxy.
+  ##
+  ##
+  - name: logger
+    config:
+      hex_output: false        # Display output as Hex instead of a string
+
+  ## HTTP Tamperer - Messes with Layer 7.
+  ##
+  ## Useful for messing with the HTTP protocol
+  ##
+  - name: http_tamperer
+    config:
+      response:
+        status: 500              # Override HTTP Status code
+        body:      "my new body" # Override response body
+      matching_rules:
+        - probability: 5           # Probability tamperer will fire      
+
+  ## Delay Tamperer
+  ## 
+  ## Artificially slow down a request to demonstrate effect of slow APIs        
+  - name: delay
+    config:
+      response: 5000
+      matching_rules:
+        - probability: 5           # Probability tamperer will fire              
