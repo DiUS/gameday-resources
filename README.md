@@ -12,7 +12,7 @@ and soon, our GameDay video.
 
 Watch a video demonstrating the techniques used in this repository:
 
-[![Chaos Engineering with Muxy and Vegeta](https://img.youtube.com/vi/DtbA9W9TS3s/0.jpg)](https://youtu.be/zBHZ26lF90w)
+[![Chaos Engineering with Muxy and Vegeta](https://img.youtube.com/vi/zBHZ26lF90w/0.jpg)](https://youtu.be/zBHZ26lF90w)
 
 ## Getting started
 
