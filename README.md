@@ -2,7 +2,7 @@
 
 A set of simple chaos engineering experiments to demonstrate the value and simplicity of chaos engineering.
 
-These experiments are a part of set of [resources](dius.com.au/resources/game-day/) that accompany our 
+These experiments are a part of set of [resources](dius.com.au/resources/game-day/) that accompany our
 talk from Agile Australia (agileaustralia.com.au/2017/sessions/#pete-and-matt) in 2017.
 
 You can also see our talk [slides](https://www.slideshare.net/DiUSComputing/gameday-achieving-resilience-through-chaos-engineering/)
@@ -16,7 +16,7 @@ Watch a video demonstrating the techniques used in this repository:
 
 ## Getting started
 
-You'll need a local installation of [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) 
+You'll need a local installation of [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/)
 to run the code in this project.
 
 From hereon, we will refer to the docker host as `docker`. You should create a local host entry for docker pointing to the IP address of your docker machine:
@@ -33,9 +33,9 @@ _NOTE_: Only tested onMac OSX and Linux variants.
 
 If you want to test these items manually and outside of Docker, you'll need:
 
-* An installation of Go 
-* [Muxy](https://github.com/mefellows/muxy/) for failure injection
-* [Vegeta](https://github.com/tsenart/vegeta) for load testing
+- An installation of Go
+- [Muxy](https://github.com/mefellows/muxy/) for failure injection
+- [Vegeta](https://github.com/tsenart/vegeta) for load testing
 
 ## Overview of the setup
 
@@ -52,7 +52,7 @@ In the event that:
 1. The API is inaccessible
 1. The API does not meet its defined SLAs (currently a generous 1500ms)
 
-The Test Harness will detect the failure and the container will exit with a non-zero status code, 
+The Test Harness will detect the failure and the container will exit with a non-zero status code,
 meaning our system needs to improve.
 
 Each experiment will attempt to improve on the behaviour of the architecture.
@@ -122,7 +122,7 @@ Hit `cntl-c` when you're ready for the next step.
 
 ![Experiment 2](images/experiment2.png)
 
-In this step, we add two new innovations. 
+In this step, we add two new innovations.
 
 1. We instrument the APIs with Statsd metrics (see sections below) to give us visibility into system performance
 1. We add a [circuit breaker](https://github.com/afex/hystrix-go) to add latency and fault-tolerance to the API
@@ -196,7 +196,7 @@ visualised by their [dashboards](https://github.com/Netflix/Hystrix/wiki/Dashboa
 
 ### [Grafana dashboard](http://docker/dashboard/db/muxy)
 
-Grafana gives us near real-time insight into which parts of the system are actively serving requests. 
+Grafana gives us near real-time insight into which parts of the system are actively serving requests.
 This allows us to see how often traffic is making it to the backend servers, if the backup function is being called or if we are fast failing.
 
 ![Grafana Dashboard](images/grafana.png)
@@ -214,9 +214,10 @@ First, run `./run-chaos.sh` so that you have a running SGG and Hystrix dashboard
 Then, in run each of the following in separate tabs. We use environment variables to configure the hosts each component is configured to connect with:
 
 ```
-cd api && API_HOST=http://localhost:8001 PORT=8000 STATSD_HOST=192.168.99.100:8125 go run main.go
+docker-compose -f docker-compose-dashboards.yml up
+cd api && API_HOST=http://localhost:8001 PORT=8000 STATSD_HOST=localhost:8125 go run main.go
 muxy proxy --config muxy/conf/config.local.yml
-cd backup && PORT=8002 STATSD_HOST=192.168.99.100:8125 go run main.go
+cd backup && PORT=8002 STATSD_HOST=localhost:8125 go run main.go
 time echo "GET http://localhost:8000/" | vegeta attack -duration=15s | tee results.bin | vegeta report
 ```
 
@@ -224,6 +225,6 @@ time echo "GET http://localhost:8000/" | vegeta attack -duration=15s | tee resul
 
 ### Local API
 
-Grab your own IP address (e.g. 192.168.0.7) and pop it into the url as per below:
+Grab your own IP address (e.g. `ifconfig en0`192.168.0.7) and pop it into the url as per below:
 
-http://docker:7979/hystrix-dashboard/monitor/monitor.html?streams=%5B%7B%22name%22%3A%22Test%22%2C%22stream%22%3A%22http%3A%2F%2F192.168.0.7%3A8181%22%2C%22auth%22%3A%22%22%2C%22delay%22%3A%22%22%7D%5D
+http://localhost:7979/hystrix-dashboard/monitor/monitor.html?streams=%5B%7B%22name%22%3A%22Test%22%2C%22stream%22%3A%22http%3A%2F%2Flocalhost%3A8181%22%2C%22auth%22%3A%22%22%2C%22delay%22%3A%22%22%7D%5D
