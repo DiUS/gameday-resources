@@ -15,7 +15,6 @@ loglevel: 0
 ##
 ## Currently supports `tcp_proxy` and `http_proxy`.
 proxy:
-
   ## HTTP Proxy: Configures an HTTP Proxy
   - name: http_proxy
     config:
@@ -36,13 +35,12 @@ proxy:
 ## Middleware are executed in the order specified in this config.
 ##
 middleware:
-
   ## Request Logger - use this to see what's going in/out of the Proxy.
   ##
   ##
   - name: logger
     config:
-      hex_output: false        # Display output as Hex instead of a string
+      hex_output: false # Display output as Hex instead of a string
 
   ## HTTP Tamperer - Messes with Layer 7.
   ##
@@ -51,16 +49,17 @@ middleware:
   - name: http_tamperer
     config:
       response:
-        status: 500              # Override HTTP Status code
-        body:      "my new body" # Override response body
+        status: 500 # Override HTTP Status code
+        body: "my new body" # Override response body
       matching_rules:
-        - probability: 5           # Probability tamperer will fire      
+        - probability: 50
 
   ## Delay Tamperer
-  ## 
-  ## Artificially slow down a request to demonstrate effect of slow APIs        
+  ##
+  ## Artificially slow down a request to demonstrate effect of slow APIs
+  # Message Delay request/response plugin
   - name: delay
     config:
-      response: 5000
+      response_delay: 5000
       matching_rules:
-        - probability: 5           # Probability tamperer will fire              
+        - probability: 5

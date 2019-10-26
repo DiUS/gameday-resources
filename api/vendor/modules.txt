@@ -1,0 +1,15 @@
+# github.com/afex/hystrix-go v0.0.0-20180502004556-fa1af6a1f4f5
+github.com/afex/hystrix-go/hystrix
+github.com/afex/hystrix-go/hystrix/metric_collector
+github.com/afex/hystrix-go/hystrix/rolling
+# github.com/quipo/statsd v0.0.0-20180118161217-3d6a5565f314
+github.com/quipo/statsd
+github.com/quipo/statsd/event
+# github.com/zenazn/goji v0.9.0
+github.com/zenazn/goji
+github.com/zenazn/goji/web
+github.com/zenazn/goji/bind
+github.com/zenazn/goji/graceful
+github.com/zenazn/goji/web/middleware
+github.com/zenazn/goji/graceful/listener
+github.com/zenazn/goji/web/mutil
