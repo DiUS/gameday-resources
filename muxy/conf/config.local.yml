@@ -52,7 +52,7 @@ middleware:
         status: 500 # Override HTTP Status code
         body: "my new body" # Override response body
       matching_rules:
-        - probability: 50
+        - probability: 5
 
   ## Delay Tamperer
   ##
